@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">android-architecture</string>
+
+    <string name="search">Search</string>
+
+    <string name="error_loading_repos">Something went wrong</string>
+    <string name="text_empty_repos">This account doesn\'t have any public repository</string>
+
+    <string name="error_username_not_found">Unknown username</string>
+
+    <string name="hit_username">Username</string>
+    <string name="default_info_message">No repositories to show</string>
+    <string name="text_fork">This repository is a fork</string>
+    <string name="text_language">Language: %s</string>
+
+    <string name="text_stars">%d \nStars</string>
+    <string name="text_watchers">%d \nWatchers</string>
+    <string name="text_forks">%d \nForks</string>
+
 </resources>
