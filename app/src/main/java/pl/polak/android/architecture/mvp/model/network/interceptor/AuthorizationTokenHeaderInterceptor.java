@@ -1,4 +1,4 @@
-package pl.polak.android.architecture.network.interceptor;
+package pl.polak.android.architecture.mvp.model.network.interceptor;
 
 import java.io.IOException;
 

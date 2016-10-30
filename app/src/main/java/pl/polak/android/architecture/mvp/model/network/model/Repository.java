@@ -1,4 +1,4 @@
-package pl.polak.android.architecture.network.model;
+package pl.polak.android.architecture.mvp.model.network.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

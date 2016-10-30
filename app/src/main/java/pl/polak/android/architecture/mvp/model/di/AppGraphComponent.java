@@ -1,12 +1,12 @@
-package pl.polak.android.architecture.di;
+package pl.polak.android.architecture.mvp.model.di;
 
 import javax.inject.Singleton;
 
 import dagger.Component;
 import pl.polak.android.architecture.GithubApplication;
-import pl.polak.android.architecture.ui.repositories.RepositoryListActivity;
-import pl.polak.android.architecture.di.modules.ApiModule;
-import pl.polak.android.architecture.di.modules.AppModule;
+import pl.polak.android.architecture.mvp.model.di.modules.ApiModule;
+import pl.polak.android.architecture.mvp.model.di.modules.AppModule;
+import pl.polak.android.architecture.mvp.model.network.handler.repository.IGithubRepositoryRequestHandler;
 
 @Singleton
 @Component(modules = {
@@ -15,7 +15,7 @@ import pl.polak.android.architecture.di.modules.AppModule;
 })
 public interface AppGraphComponent {
 
-    void inject(RepositoryListActivity repositoryListActivity);
+    IGithubRepositoryRequestHandler githubRepositoryRequestHandler();
 
     abstract class Initializer {
 

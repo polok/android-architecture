@@ -2,7 +2,7 @@ package pl.polak.android.architecture;
 
 import android.app.Application;
 
-import pl.polak.android.architecture.di.AppGraphComponent;
+import pl.polak.android.architecture.mvp.model.di.AppGraphComponent;
 
 public class GithubApplication extends Application {
 

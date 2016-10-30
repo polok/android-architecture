@@ -1,4 +1,4 @@
-package pl.polak.android.architecture.ui.repositories;
+package pl.polak.android.architecture.mvp.view.repositories;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -23,20 +23,19 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import pl.polak.android.architecture.GithubApplication;
 import pl.polak.android.architecture.R;
-import pl.polak.android.architecture.network.handler.repository.IGithubRepositoryRequestHandler;
-import pl.polak.android.architecture.network.model.Repository;
+import pl.polak.android.architecture.mvp.model.di.DaggerGithubRepositoryComponent;
+import pl.polak.android.architecture.mvp.model.di.GithubRepositoryComponent;
+import pl.polak.android.architecture.mvp.model.di.modules.ActivityModule;
+import pl.polak.android.architecture.mvp.model.di.modules.GithubRepositoryModule;
+import pl.polak.android.architecture.mvp.model.network.model.Repository;
+import pl.polak.android.architecture.mvp.presenter.IRepositoryListPresenter;
 
-public class RepositoryListActivity extends AppCompatActivity {
+public class RepositoryListActivity extends AppCompatActivity implements RepositoryListView {
 
     @Inject
-    IGithubRepositoryRequestHandler repositoryRequestHandler;
+    IRepositoryListPresenter presenter;
 
     @BindView(R.id.repositories_recycler_view)
     RecyclerView repositoriesRecycleView;
@@ -53,44 +52,23 @@ public class RepositoryListActivity extends AppCompatActivity {
     @BindView(R.id.button_search)
     ImageButton searchButton;
 
-    private Disposable disposable;
-
-    private Consumer<List<Repository>> showRepositories = repositories -> {
-        RepositoryAdapter adapter = (RepositoryAdapter) repositoriesRecycleView.getAdapter();
-        adapter.setRepositories(repositories);
-        adapter.notifyDataSetChanged();
-    };
-
-    private Action onLoadingComplete = () -> {
-        progressBar.setVisibility(View.GONE);
-        if (repositoriesRecycleView.getAdapter().getItemCount() > 0) {
-            repositoriesRecycleView.requestFocus();
-            repositoriesRecycleView.setVisibility(View.VISIBLE);
-            hideSoftKeyboard();
-        } else {
-            infoTextView.setText(R.string.text_empty_repos);
-            infoTextView.setVisibility(View.VISIBLE);
-        }
-    };
-
-    private Consumer<Throwable> showError = throwable -> {
-        progressBar.setVisibility(View.GONE);
-        if (throwable instanceof HttpException && ((HttpException) throwable).code() == 404) {
-            infoTextView.setText(R.string.error_username_not_found);
-        } else {
-            infoTextView.setText(R.string.error_loading_repos);
-        }
-
-        infoTextView.setVisibility(View.VISIBLE);
-    };
+    private GithubRepositoryComponent repositoryComponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        repositoryComponent = DaggerGithubRepositoryComponent.builder()
+                .appGraphComponent(GithubApplication.component())
+                .activityModule(new ActivityModule(this))
+                .githubRepositoryModule(new GithubRepositoryModule())
+                .build();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        GithubApplication.component().inject(this);
+        repositoryComponent.inject(this);
         ButterKnife.bind(this);
+
+        presenter.attachView(this);
 
         initUI();
 
@@ -127,15 +105,11 @@ public class RepositoryListActivity extends AppCompatActivity {
     }
 
     private void loadGitHubRepositories(String username) {
-        disposable = repositoryRequestHandler.loadRepositoriesFor(username)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> {
-                    progressBar.setVisibility(View.VISIBLE);
-                    repositoriesRecycleView.setVisibility(View.GONE);
-                    infoTextView.setVisibility(View.GONE);
-                })
-                .subscribe(showRepositories, showError, onLoadingComplete);
+        progressBar.setVisibility(View.VISIBLE);
+        repositoriesRecycleView.setVisibility(View.GONE);
+        infoTextView.setVisibility(View.GONE);
+
+        presenter.loadRepositories(username);
     }
 
     private void hideSoftKeyboard() {
@@ -161,8 +135,37 @@ public class RepositoryListActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (disposable != null) {
-            disposable.dispose();
+        presenter.detachView();
+    }
+
+    @Override
+    public void showRepositories(List<Repository> repositories) {
+        RepositoryAdapter adapter = (RepositoryAdapter) repositoriesRecycleView.getAdapter();
+        adapter.setRepositories(repositories);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showLoadingError(Throwable throwable) {
+        progressBar.setVisibility(View.GONE);
+        if (throwable instanceof HttpException && ((HttpException) throwable).code() == 404) {
+            infoTextView.setText(R.string.error_username_not_found);
+        } else {
+            infoTextView.setText(R.string.error_loading_repos);
+        }
+        infoTextView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onLoadingCompleted() {
+        progressBar.setVisibility(View.GONE);
+        if (repositoriesRecycleView.getAdapter().getItemCount() > 0) {
+            repositoriesRecycleView.requestFocus();
+            repositoriesRecycleView.setVisibility(View.VISIBLE);
+            hideSoftKeyboard();
+        } else {
+            infoTextView.setText(R.string.text_empty_repos);
+            infoTextView.setVisibility(View.VISIBLE);
         }
     }
 }

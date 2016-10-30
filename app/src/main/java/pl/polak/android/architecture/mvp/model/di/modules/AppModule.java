@@ -1,4 +1,4 @@
-package pl.polak.android.architecture.di.modules;
+package pl.polak.android.architecture.mvp.model.di.modules;
 
 import android.app.Application;
 import android.content.res.Resources;

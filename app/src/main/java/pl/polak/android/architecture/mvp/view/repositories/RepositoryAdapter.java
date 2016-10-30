@@ -1,4 +1,4 @@
-package pl.polak.android.architecture.ui.repositories;
+package pl.polak.android.architecture.mvp.view.repositories;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +13,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.polak.android.architecture.R;
-import pl.polak.android.architecture.network.model.Repository;
+import pl.polak.android.architecture.mvp.model.network.model.Repository;
 
 
 public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.RepositoryViewHolder> {
@@ -67,14 +67,19 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Re
 
         @BindView(R.id.layout_content)
         View contentLayout;
+
         @BindView(R.id.text_repo_title)
         TextView titleTextView;
+
         @BindView(R.id.text_repo_description)
         TextView descriptionTextView;
+
         @BindView(R.id.text_watchers)
         TextView watchersTextView;
+
         @BindView(R.id.text_stars)
         TextView starsTextView;
+
         @BindView(R.id.text_forks)
         TextView forksTextView;
 

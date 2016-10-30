@@ -1,12 +1,12 @@
-package pl.polak.android.architecture.network.handler.repository;
+package pl.polak.android.architecture.mvp.model.network.handler.repository;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import pl.polak.android.architecture.network.api.GithubRepositoryApi;
-import pl.polak.android.architecture.network.model.Repository;
+import pl.polak.android.architecture.mvp.model.network.api.GithubRepositoryApi;
+import pl.polak.android.architecture.mvp.model.network.model.Repository;
 
 public class GithubRepositoryRequestHandler implements IGithubRepositoryRequestHandler {
 

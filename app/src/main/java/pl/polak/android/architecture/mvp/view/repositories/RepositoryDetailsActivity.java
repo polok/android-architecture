@@ -1,4 +1,4 @@
-package pl.polak.android.architecture.ui.repositories;
+package pl.polak.android.architecture.mvp.view.repositories;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.polak.android.architecture.R;
-import pl.polak.android.architecture.network.model.Repository;
+import pl.polak.android.architecture.mvp.model.network.model.Repository;
 
 public class RepositoryDetailsActivity extends AppCompatActivity {
 
