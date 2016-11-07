@@ -1,4 +1,4 @@
-package pl.polak.android.architecture.ui.repositories;
+package pl.polak.android.architecture.view.repositories;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,15 +10,15 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.polak.android.architecture.R;
-import pl.polak.android.architecture.network.model.Repository;
+import pl.polak.android.architecture.viewmodel.RepositoryItemViewModel;
 
 public class RepositoryDetailsActivity extends AppCompatActivity {
 
     public static final String REPOSITORY_DETAILS_MODEL_EXTRA = "repository_details_model_extra";
 
-    public static void start(Activity activity, Repository repository) {
+    public static void start(Activity activity, RepositoryItemViewModel repositoryItemViewModel) {
         Intent intent = new Intent(activity, RepositoryDetailsActivity.class);
-        intent.putExtra(REPOSITORY_DETAILS_MODEL_EXTRA, repository);
+        intent.putExtra(REPOSITORY_DETAILS_MODEL_EXTRA, repositoryItemViewModel);
         activity.startActivity(intent);
     }
 
@@ -38,8 +38,8 @@ public class RepositoryDetailsActivity extends AppCompatActivity {
         bindData(getIntent().getExtras().getParcelable(REPOSITORY_DETAILS_MODEL_EXTRA));
     }
 
-    private void bindData(Repository repository) {
-        tvTitle.setText(repository.getName());
-        tvDescription.setText(repository.getDescription());
+    private void bindData(RepositoryItemViewModel repositoryItemViewModel) {
+        tvTitle.setText(repositoryItemViewModel.getTitle());
+        tvDescription.setText(repositoryItemViewModel.getDescription());
     }
 }

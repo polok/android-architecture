@@ -1,4 +1,4 @@
-package pl.polak.android.architecture.di.modules;
+package pl.polak.android.architecture.model.di.modules;
 
 import android.content.res.Resources;
 
@@ -10,11 +10,11 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
 import pl.polak.android.architecture.R;
-import pl.polak.android.architecture.network.handler.repository.GithubRepositoryRequestHandler;
-import pl.polak.android.architecture.network.handler.repository.IGithubRepositoryRequestHandler;
-import pl.polak.android.architecture.network.interceptor.AuthorizationTokenHeaderInterceptor;
-import pl.polak.android.architecture.network.api.GithubRepositoryApi;
-import pl.polak.android.architecture.di.GithubToken;
+import pl.polak.android.architecture.model.network.handler.repository.GithubRepositoryRequestHandler;
+import pl.polak.android.architecture.model.network.handler.repository.IGithubRepositoryRequestHandler;
+import pl.polak.android.architecture.model.network.interceptor.AuthorizationTokenHeaderInterceptor;
+import pl.polak.android.architecture.model.network.api.GithubRepositoryApi;
+import pl.polak.android.architecture.model.di.GithubToken;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 

@@ -1,9 +1,9 @@
-package pl.polak.android.architecture.network.api;
+package pl.polak.android.architecture.model.network.api;
 
 import java.util.List;
 
 import io.reactivex.Observable;
-import pl.polak.android.architecture.network.model.Repository;
+import pl.polak.android.architecture.model.network.model.Repository;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 

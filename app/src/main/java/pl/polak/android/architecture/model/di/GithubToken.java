@@ -1,4 +1,4 @@
-package pl.polak.android.architecture.di;
+package pl.polak.android.architecture.model.di;
 
 import java.lang.annotation.Retention;
 

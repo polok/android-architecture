@@ -1,4 +1,4 @@
-package pl.polak.android.architecture.ui.repositories;
+package pl.polak.android.architecture.view.repositories;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -23,20 +23,16 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import pl.polak.android.architecture.GithubApplication;
 import pl.polak.android.architecture.R;
-import pl.polak.android.architecture.network.handler.repository.IGithubRepositoryRequestHandler;
-import pl.polak.android.architecture.network.model.Repository;
+import pl.polak.android.architecture.viewmodel.RepositoryViewModel;
+import pl.polak.android.architecture.viewmodel.RepositoryItemViewModel;
 
 public class RepositoryListActivity extends AppCompatActivity {
 
     @Inject
-    IGithubRepositoryRequestHandler repositoryRequestHandler;
+    RepositoryViewModel repositoryViewModel;
 
     @BindView(R.id.repositories_recycler_view)
     RecyclerView repositoriesRecycleView;
@@ -55,13 +51,13 @@ public class RepositoryListActivity extends AppCompatActivity {
 
     private Disposable disposable;
 
-    private Consumer<List<Repository>> showRepositories = repositories -> {
+    public void showRepositories(List<RepositoryItemViewModel> repositories) {
         RepositoryAdapter adapter = (RepositoryAdapter) repositoriesRecycleView.getAdapter();
         adapter.setRepositories(repositories);
         adapter.notifyDataSetChanged();
     };
 
-    private Action onLoadingComplete = () -> {
+    private void onLoadingComplete() {
         progressBar.setVisibility(View.GONE);
         if (repositoriesRecycleView.getAdapter().getItemCount() > 0) {
             repositoriesRecycleView.requestFocus();
@@ -73,7 +69,7 @@ public class RepositoryListActivity extends AppCompatActivity {
         }
     };
 
-    private Consumer<Throwable> showError = throwable -> {
+    private void showError(Throwable throwable) {
         progressBar.setVisibility(View.GONE);
         if (throwable instanceof HttpException && ((HttpException) throwable).code() == 404) {
             infoTextView.setText(R.string.error_username_not_found);
@@ -93,7 +89,7 @@ public class RepositoryListActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         initUI();
-
+        setupViewModelBindings();
     }
 
     private void initUI() {
@@ -126,16 +122,19 @@ public class RepositoryListActivity extends AppCompatActivity {
         searchButton.setOnClickListener(__ -> loadGitHubRepositories(usernameEditText.getText().toString()));
     }
 
+    private void setupViewModelBindings() {
+        disposable = repositoryViewModel.repositoryListObservable().subscribe(repositories -> {
+            showRepositories(repositories);
+            onLoadingComplete();
+        }, this::showError);
+    }
+
     private void loadGitHubRepositories(String username) {
-        disposable = repositoryRequestHandler.loadRepositoriesFor(username)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> {
-                    progressBar.setVisibility(View.VISIBLE);
-                    repositoriesRecycleView.setVisibility(View.GONE);
-                    infoTextView.setVisibility(View.GONE);
-                })
-                .subscribe(showRepositories, showError, onLoadingComplete);
+        progressBar.setVisibility(View.VISIBLE);
+        repositoriesRecycleView.setVisibility(View.GONE);
+        infoTextView.setVisibility(View.GONE);
+
+        repositoryViewModel.loadRepositories(username);
     }
 
     private void hideSoftKeyboard() {

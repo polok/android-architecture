@@ -1,9 +1,9 @@
-package pl.polak.android.architecture.network.handler.repository;
+package pl.polak.android.architecture.model.network.handler.repository;
 
 import java.util.List;
 
 import io.reactivex.Observable;
-import pl.polak.android.architecture.network.model.Repository;
+import pl.polak.android.architecture.model.network.model.Repository;
 
 public interface IGithubRepositoryRequestHandler {
 

@@ -1,12 +1,12 @@
-package pl.polak.android.architecture.di;
+package pl.polak.android.architecture.model.di;
 
 import javax.inject.Singleton;
 
 import dagger.Component;
 import pl.polak.android.architecture.GithubApplication;
-import pl.polak.android.architecture.ui.repositories.RepositoryListActivity;
-import pl.polak.android.architecture.di.modules.ApiModule;
-import pl.polak.android.architecture.di.modules.AppModule;
+import pl.polak.android.architecture.view.repositories.RepositoryListActivity;
+import pl.polak.android.architecture.model.di.modules.ApiModule;
+import pl.polak.android.architecture.model.di.modules.AppModule;
 
 @Singleton
 @Component(modules = {
