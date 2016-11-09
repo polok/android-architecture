@@ -23,9 +23,13 @@ A project where some API work is handled in some separate class but generally a 
 Here, our Activities/Fragments become a part of the 'view' layer and they delegate most of the work to presenters. Each activity or fragment has it's own presenter that handles user interaction and manage the data based on these actions.
 Note, that writing unit tests for presenters become very easy by mocking the view layer! Hurra, no more 'Error java.lang.RuntimeException: Stub!'
 
+![image](art/mvp_diagram_a.png)
+
 ## MVVM - Model View ViewModel
 This approach supports two-way data binding between 'view' and 'View Model'. This enables automatic propagation of changes, within the state of view model to the View. Also here, we should have one ViewModel to one activity/fragment.
 Also here, writting unit tests becomes easier because the ViewModels are decoupled from the view. The view knows about ViewModel but ViewModel doesn't know anything about the view. It knows only our model layer.
+
+![image](art/mvvm_diagram_a.png)
 
 ## Requirements
 
